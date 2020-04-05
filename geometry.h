@@ -14,6 +14,7 @@ private:
 };
 
 typedef vec<2, float> Vec2f;
+typedef vec<2, int> Vec2i;
 typedef vec<3, float> Vec3f;
 typedef vec<3, int  > Vec3i;
 typedef vec<4, float> Vec4f;
@@ -51,6 +52,13 @@ template<size_t DIM,typename T> T operator*(const vec<DIM,T>& lhs, const vec<DIM
     return ret;
 }
 
+template<size_t DIM,typename T> bool operator==(const vec<DIM,T>& lhs, const vec<DIM,T>& rhs) {
+    for (int i=DIM; i>=0; i--) {
+        if (lhs[i] != rhs[i]) return false;
+    }
+    return true;
+}
+
 template<size_t DIM,typename T>vec<DIM,T> operator+(vec<DIM,T> lhs, const vec<DIM,T>& rhs) {
     for (size_t i=DIM; i--; lhs[i]+=rhs[i]);
     return lhs;
@@ -61,23 +69,35 @@ template<size_t DIM,typename T>vec<DIM,T> operator-(vec<DIM,T> lhs, const vec<DI
     return lhs;
 }
 
+template<size_t DIM,typename T, typename U>vec<DIM,T> operator/(vec<DIM,T> lhs, const U& rhs) {
+    for (size_t i=DIM; i--; lhs[i] = lhs[i]/rhs);
+    return lhs;
+}
+
 template<size_t DIM,typename T,typename U> vec<DIM,T> operator*(const vec<DIM,T> &lhs, const U& rhs) {
     vec<DIM,T> ret;
     for (size_t i=DIM; i--; ret[i]=lhs[i]*rhs);
     return ret;
 }
 
+template<size_t DIM,typename T,typename U> vec<DIM,T> operator+(const vec<DIM,T> &lhs, const U& rhs) {
+    vec<DIM,T> ret;
+    for (size_t i=DIM; i--; ret[i]=lhs[i]+rhs);
+    return ret;
+}
+
 template<size_t DIM,typename T> vec<DIM,T> operator-(const vec<DIM,T> &lhs) {
     return lhs*T(-1);
+}
 
-    template <typename T> vec<3,T> cross(vec<3,T> v1, vec<3,T> v2) {
-        return vec<3,T>(v1.y*v2.z - v1.z*v2.y, v1.z*v2.x - v1.x*v2.z, v1.x*v2.y - v1.y*v2.x);
-    }
+template <typename T> vec<3,T> cross(vec<3,T> v1, vec<3,T> v2) {
+	return vec<3,T>(v1.y*v2.z - v1.z*v2.y, v1.z*v2.x - v1.x*v2.z, v1.x*v2.y - v1.y*v2.x);
+}
 
-    template <size_t DIM, typename T> std::ostream& operator<<(std::ostream& out, const vec<DIM,T>& v) {
-        for(unsigned int i=0; i<DIM; i++) {
+template <size_t DIM, typename T> std::ostream& operator<<(std::ostream& out, const vec<DIM,T>& v) {
+	for(unsigned int i=0; i<DIM; i++) {
             out << v[i] << " " ;
         }
         return out ;
-    }
+}
 #endif //__GEOMETRY_H__
